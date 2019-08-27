@@ -52,7 +52,7 @@ input.form-control {
   font-size: 22px;
   line-height: 24px;
   margin-top: -12px;
-  z-index: 10;
+  z-index: 9;
   border-right: 1px solid #337ab7;
   text-align: center;
   color: #337ab7;
@@ -74,7 +74,7 @@ input.form-control {
   font-size: 22px;
   line-height: 24px;
   margin-top: -12px;
-  z-index: 10;
+  z-index: 9;
   border-right: 1px solid #337ab7;
   text-align: center;
   color: #337ab7;

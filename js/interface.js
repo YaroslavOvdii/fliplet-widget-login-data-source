@@ -195,12 +195,12 @@ function createDataSource() {
   var name = prompt('Please type a name for your data source:');
 
   if (name === null) {
-    $dataSources.val('').trigger('change');
+    $dataSource.val('').trigger('change');
     return;
   }
 
   if (name === '') {
-    $dataSources.val('').trigger('change');
+    $dataSource.val('').trigger('change');
     alert('You must enter a data source name');
     return;
   }
