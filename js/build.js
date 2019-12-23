@@ -1,8 +1,5 @@
-Fliplet.Widget.instance('login-ds', function (instanceData) {
+Fliplet.Widget.instance('login-ds', function (data) {
   var $container = $(this);
-  var widgetId = instanceData.id;
-  var widgetUuid = instanceData.uuid;
-  var data = Fliplet.Widget.getData(widgetId);
   var dataSourceEntry; // Data source entry after user verify email
 
   // Do not track login related redirects
@@ -11,13 +8,6 @@ Fliplet.Widget.instance('login-ds', function (instanceData) {
   }
 
   this.pvName = 'login_data_source_component_' + Fliplet.Env.get('appId');
-  // Unused object should we remote it?
-  var dataStructure = {
-    auth_token: '',
-    id: '',
-    email: '',
-    createdAt: null
-  };
 
   var CODE_VALID = 30,
     APP_NAME = Fliplet.Env.get('appName'),
@@ -120,14 +110,14 @@ Fliplet.Widget.instance('login-ds', function (instanceData) {
 
   function resetFromDataSource(data_source_id, where) {
     return Fliplet.DataSources.connect(data.dataSource, {
-        offline: false
+      offline: false
+    })
+    .then(function (dataSource) {
+      return dataSource.sendValidation({
+        type: 'email',
+        where: where
       })
-      .then(function (dataSource) {
-        return dataSource.sendValidation({
-          type: 'email',
-          where: where
-        })
-      });
+    });
   }
 
   function createUserProfile(entry) {
@@ -568,32 +558,32 @@ Fliplet.Widget.instance('login-ds', function (instanceData) {
       calculateElHeight($container.find('.state[data-state=verify-code]'));
 
       Fliplet.DataSources.connect(data.dataSource, {
-          offline: false
+        offline: false
+      })
+      .then(function (dataSource) {
+        var where = {};
+        where[data.emailColumn] = resetEmail;
+        dataSource.sendValidation({
+          type: 'email',
+          where: where
         })
-        .then(function (dataSource) {
-          var where = {};
-          where[data.emailColumn] = resetEmail;
-          dataSource.sendValidation({
-              type: 'email',
-              where: where
-            })
-            .then(function () {
-              $container.find('.pin-code-field').val('');
-              $container.find('.pin-sent-success').removeClass('hidden');
-              if ($container.find('.state[data-state=verify-code] .form-group').hasClass('has-error')) {
-                $container.find('.state[data-state=verify-code] .form-group').removeClass('has-error');
-              }
-              if (!$container.find('.resend-code').hasClass('hidden')) {
-                $container.find('.resend-code').addClass('hidden');
-              }
+        .then(function () {
+          $container.find('.pin-code-field').val('');
+          $container.find('.pin-sent-success').removeClass('hidden');
+          if ($container.find('.state[data-state=verify-code] .form-group').hasClass('has-error')) {
+            $container.find('.state[data-state=verify-code] .form-group').removeClass('has-error');
+          }
+          if (!$container.find('.resend-code').hasClass('hidden')) {
+            $container.find('.resend-code').addClass('hidden');
+          }
 
-              calculateElHeight($container.find('.state[data-state=verify-code]'));
-            })
-            .catch(function (error) {
-              console.error('Error resending code', error);
-              $container.find('.pin-sent-error').text(CONTACT_UNREACHABLE).removeClass('hidden');
-            });
+          calculateElHeight($container.find('.state[data-state=verify-code]'));
+        })
+        .catch(function (error) {
+          console.error('Error resending code', error);
+          $container.find('.pin-sent-error').text(CONTACT_UNREACHABLE).removeClass('hidden');
         });
+      });
     });
   }
 
