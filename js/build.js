@@ -99,13 +99,13 @@ Fliplet.Widget.instance('login-ds', function (data) {
 
   function loginFromDataSource(data_source_id, where) {
     return Fliplet.Session.authorize({
-        passport: 'dataSource',
-        dataSourceId: data_source_id,
-        where: where
-      })
-      .catch(function (error) {
-        return Promise.reject(error);
-      });
+      passport: 'dataSource',
+      dataSourceId: data_source_id,
+      where: where
+    })
+    .catch(function (error) {
+      return Promise.reject(error);
+    });
   }
 
   function resetFromDataSource(data_source_id, where) {
@@ -562,6 +562,7 @@ Fliplet.Widget.instance('login-ds', function (data) {
       })
       .then(function (dataSource) {
         var where = {};
+
         where[data.emailColumn] = resetEmail;
         dataSource.sendValidation({
           type: 'email',
@@ -570,9 +571,11 @@ Fliplet.Widget.instance('login-ds', function (data) {
         .then(function () {
           $container.find('.pin-code-field').val('');
           $container.find('.pin-sent-success').removeClass('hidden');
+
           if ($container.find('.state[data-state=verify-code] .form-group').hasClass('has-error')) {
             $container.find('.state[data-state=verify-code] .form-group').removeClass('has-error');
           }
+
           if (!$container.find('.resend-code').hasClass('hidden')) {
             $container.find('.resend-code').addClass('hidden');
           }
