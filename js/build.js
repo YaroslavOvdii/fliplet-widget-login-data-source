@@ -112,11 +112,11 @@ Fliplet.Widget.instance('login-ds', function (data) {
     return Fliplet.DataSources.connect(data.dataSource, {
       offline: false
     })
-    .then(function (dataSource) {
-      return dataSource.sendValidation({
-        type: 'email',
-        where: where
-      })
+      .then(function (dataSource) {
+        return dataSource.sendValidation({
+          type: 'email',
+          where: where
+        })
     });
   }
 
