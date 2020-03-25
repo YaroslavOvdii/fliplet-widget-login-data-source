@@ -243,9 +243,24 @@ Fliplet.Widget.instance('login-ds', function(data) {
           _this.find('.btn-label').removeClass('hidden');
           _this.find('.loader').removeClass('show');
           _this.parents('.form-btns').find('.login-error').html('Your email or password don\'t match. Please try again.').removeClass('hidden');
-          Fliplet.UI.Toast.error(error, {
-            message: 'Login error'
-          });
+          Fliplet.UI.Toast({
+            type: 'minimal',
+            message: 'Login error',
+            duration: 2000,
+            actions: [
+              {
+                label: 'Detail',
+                action: function () {
+                  Fliplet.UI.Toast({
+                    type: 'minimal',
+                    message: error.responseJSON.message,
+                    duration: 2000
+                  }); // Initiating a new Toast notification will automatically dismiss all existing Toast notifications
+                  return false;
+                }
+              }
+            ]
+          })
         });
     });
 
