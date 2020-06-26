@@ -1,32 +1,33 @@
-<div data-login-ds-id="{{id}}" data-login-ds-uuid="{{uuid}}">
-  <h1 class="text-center">Login</h1>
+<div data-login-ds-id="{{id}}" data-login-ds-uuid="{{uuid}}" style="visibility:hidden">
+  <h1 data-i18n-key="component.login:title" class="text-center">Login</h1>
   <div class="fl-login-holder" ontouchstart="">
     <div class="fl-login-header">
-      <p class="instruction">Enter your access details below</p>
+      <p data-i18n-key="component.login:instruction" class="instruction">Enter your access details below</p>
     </div>
 
     <div class="fl-login-form">
       <form class="form-horizontal form-login">
         <div class="form-group clearfix ">
           <div class="col-sm-12 fl-email">
-            <input type="email" class="form-control profile_email" name="Email" placeholder="Enter your email" autocomplete="false" />
+            <input data-i18n-key="component.login:emailPlaceholder" data-i18n-type="attr" data-i18n-attr="placeholder" type="email" class="form-control profile_email" name="Email" placeholder="Enter your email" autocomplete="false" />
           </div>
         </div>
 
         <div class="form-group clearfix">
           <div class="col-sm-12 fl-password">
-            <input type="password" class="form-control profile_password" name="Password" placeholder="Enter your password" autocomplete="new-password" />
+            <input data-i18n-key="component.login:passwordPlaceholder" 
+            data-i18n-type="attr" data-i18n-attr="placeholder" type="password" class="form-control profile_password" name="Password" placeholder="Enter your password" autocomplete="new-password" />
           </div>
         </div>
 
         <div class="form-btns clearfix">
-          <p class="text-danger login-error hidden">The details you entered don’t match our records. Please try again.</p>
+          <p data-i18n-key="component.login:mismatch" class="text-danger login-error hidden">The details you entered don’t match our records. Please try again.</p>
           <p><button class="btn btn-primary btn-login" type="submit">
-            <span class="btn-label">Log in</span>
-            <span class="loader">Loading...</span>
+            <span data-i18n-key="component.login:action" class="btn-label">Log in</span>
+            <span data-i18n-key="component.login:loading" class="loader">Loading...</span>
           </button></p>
           {{#if allowReset}}
-          <p><span class="btn btn-link btn-forget-pass">Forgot your password?</span></p>
+          <p><span data-i18n-key="component.login:forgotPassword" class="btn btn-link btn-forget-pass">Forgot your password?</span></p>
           {{/if}}
         </div>
       </form>
@@ -37,60 +38,60 @@
   <div class="fl-restore-pass" ontouchstart="">
     <div class="state start" data-state="verify-email">
       <form class="form-horizontal form-verify-email">
-        <p class="instruction">To reset your password you must verify your email address.</p>
+        <p data-i18n-key="component.login.restore:instruction" class="instruction">To reset your password you must verify your email address.</p>
         <div class="input-wrapper">
-          <input type="email" class="form-control reset-email-field" placeholder="Enter your email" autocomplete="false" />
+          <input data-i18n-key="component.login.restore:emailPlaceholder" data-i18n-type="attr" data-i18n-attr="placeholder" type="email" class="form-control reset-email-field" placeholder="Enter your email" autocomplete="false" />
         </div>
-        <p class="text-danger reset-email-error hidden">Your email address cannot be found. Please try again.</p>
+        <p data-i18n-key="component.login.restore:mismatch" class="text-danger reset-email-error hidden">Your email address cannot be found. Please try again.</p>
         <p>
-          <span class="btn btn-link back-login">Back to Login</span>
+          <span data-i18n-key="component.login.restore:goBack" class="btn btn-link back-login">Back to Login</span>
           <button class="btn btn-primary verify-identity" type="submit">
-            <span class="btn-label">Verify email</span>
-            <span class="loader">Loading...</span>
+            <span data-i18n-key="component.login.restore:action" class="btn-label">Verify email</span>
+            <span data-i18n-key="component.login:loading" class="loader">Loading...</span>
           </button>
         </p>
-        <p><span class="btn btn-link have-code hidden">I have a verification code</span></p>
+        <p><span data-i18n-key="component.login.restore:verifyCode" class="btn btn-link have-code hidden">I have a verification code</span></p>
       </form>
     </div>
 
     <div class="state future" data-state="verify-code">
       <form class="form-horizontal form-verify-code">
-        <p class="instruction">A verification code was sent to <span class="verify-user-email"></span>.</p>
+        <p data-i18n-key="component.login.verify:instruction" class="instruction">A verification code was sent to <span class="verify-user-email"></span>.</p>
         <div class="input-wrapper">
-          <input type="text" class="form-control pin-code-field" placeholder="Enter verification code" />
+          <input data-i18n-key="component.login.verify:codePlaceholder" data-i18n-type="attr" data-i18n-attr="placeholder" type="text" class="form-control pin-code-field" placeholder="Enter verification code" />
           <span class="text-primary fa fa-angle-left back start"></span>
         </div>
-        <p class="text-danger pin-verify-error hidden">You entered the wrong code or the code expired. Please try again or request a new code.</p>
+        <p data-i18n-key="component.login.verify:mismatch" class="text-danger pin-verify-error hidden">You entered the wrong code or the code expired. Please try again or request a new code.</p>
         <p class="text-danger pin-sent-error hidden"></p>
         <p>
-          <span class="btn btn-link resend-code hidden">Resend verification code</span>
+          <span data-i18n-key="component.login.verify:resend" class="btn btn-link resend-code hidden">Resend verification code</span>
           <button class="btn btn-primary authenticate" type="submit">
-            <span class="btn-label">Verify</span>
-            <span class="loader">Loading...</span>
+            <span data-i18n-key="component.login.verify:action" class="btn-label">Verify</span>
+            <span data-i18n-key="component.login:loading" class="loader">Loading...</span>
           </button>
         </p>
-        <p class="text-success pin-sent-success hidden">A new code was sent to your email.</p>
+        <p data-i18n-key="component.login.verify:sendCode" class="text-success pin-sent-success hidden">A new code was sent to your email.</p>
       </form>
     </div>
 
     <div class="state future" data-state="reset-password">
       <form class="form-horizontal form-reset-password">
-        <p class="instruction">Enter your new password below.</p>
+        <p data-i18n-key="component.login.reset:instruction" class="instruction">Enter your new password below.</p>
         <div class="input-wrapper">
-          <input type="password" class="form-control new-password" placeholder="Enter your new password" autocomplete="new-password" />
-          <input type="password" class="form-control confirm-password" placeholder="Confirm your new password" autocomplete="new-password" />
+          <input data-i18n-key="component.login.reset:passwordPlaceholder" data-i18n-type="attr" data-i18n-attr="placeholder" type="password" class="form-control new-password" placeholder="Enter your new password" autocomplete="new-password" />
+          <input data-i18n-key="component.login.reset:confirmPasswordPlaceholder" data-i18n-type="attr" data-i18n-attr="placeholder" type="password" class="form-control confirm-password" placeholder="Confirm your new password" autocomplete="new-password" />
         </div>
-        <p class="text-danger reset-password-error hidden">Passwords don't match. Please try again.</p>
+        <p data-i18n-key="component.login.reset:mismatch" class="text-danger reset-password-error hidden">Passwords don't match. Please try again.</p>
         <p><button class="btn btn-primary update-password" type="submit">
-          <span class="btn-label">Reset password</span>
-          <span class="loader">Loading...</span>
+          <span data-i18n-key="component.login.reset:action" class="btn-label">Reset password</span>
+          <span data-i18n-key="component.login:loading" class="loader">Loading...</span>
         </button></p>
       </form>
     </div>
 
     <div class="state future" data-state="all-done">
-      <p class="instruction">You can now login using your email address and new password.</p>
-      <p><span class="btn btn-primary back-login">Login</span></p>
+      <p data-i18n-key="component.login.allDone:instruction" class="instruction">You can now login using your email address and new password.</p>
+      <p><span data-i18n-key="component.login.allDone:action" class="btn btn-primary back-login">Login</span></p>
     </div>
   </div>
   {{/if}}
