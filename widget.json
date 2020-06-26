@@ -37,6 +37,7 @@
     ],
     "assets": [
       "vendor/moment.js",
+      "vendor/i18next.min.js",
       "js/build.js",
       "css/build.css"
     ]

@@ -22,10 +22,94 @@ Fliplet.Widget.instance('login-ds', function(data) {
   var DATA_DIRECTORY_EMAIL_COLUMN = data.emailColumn;
   var DATA_DIRECTORY_PASS_COLUMN = data.passColumn;
   var ORG_NAME = Fliplet.Env.get('organizationName');
+  var defaultLang = {
+    en: {
+      'component.login': {
+        title: 'Login',
+        instruction: 'Enter your access details below',
+        emailPlaceholder: 'Enter your email',
+        passwordPlaceholder: 'Enter your password',
+        mismatch: 'The details you entered don’t match our records. Please try again.',
+        action: 'Log in',
+        loader: 'Loading...',
+        forgotPassword: 'Forgot your password?',
+      },
+      'component.login.restore': {
+        instruction: 'To reset your password you must verify your email address.',
+        mismatch: 'Your email address cannot be found. Please try again.',
+        goBack: 'Back to Login',
+        action: 'Verify email',
+        verifyCode: 'I have a verification code',
+      },
+      'component.login.reset': {
+        instruction: 'Enter your new password below.',
+        passwordPlaceholder: 'Enter your new password',
+        confirmPasswordPlaceholder: 'Confirm your new password',
+        mismatch: 'Passwords don\'t match. Please try again.',
+        action: 'Reset password',
+      },
+      'component.login.verify': {
+        instruction: 'A verification code was sent to',
+        codePlaceholder: 'Enter verification code',
+        mismatch: 'You entered the wrong code or the code expired. Please try again or request a new code.',
+        resend: 'Resend verification code',
+        action: 'Verify',
+        sendCode: 'A new code was sent to your email.',
+      },
+      'component.login.allDone': {
+        instruction: 'You can now login using your email address and new password.',
+        action: 'Login'
+      }
+    }
+  };
+  var currentLang = navigator.language;
 
   if (Fliplet.Navigate.query.error) {
     $container.find('.login-error').html(Fliplet.Navigate.query.error).removeClass('hidden');
   }
+
+  function initI18Next() {
+    i18next.init({
+      lng: currentLang,
+      fallbackLng: 'en',
+      resources: defaultLang 
+    }).then(function() {
+      setCurrentLang()
+
+      $container.css('visibility', 'visible');
+      // Fire hook for other features to adjust UI render if necessary
+      Fliplet.Hooks.run('i10nComplete');
+    });
+  }
+
+  function setCurrentLang() {
+    $('[data-i18n-key]').each(function() {
+      var $el = $(this);
+      var key = $el.data('i18n-key');
+  
+      if (!i18next.exists(key)) {
+        // i18n key not found
+        return;
+      }
+  
+      switch ($el.data('i18n-type')) {
+        case 'attr':
+          // Update HTML attribute
+          var attr = $el.data('i18n-attr');
+  
+          if (!attr) {
+            break;
+          }
+  
+          $el.attr(attr, i18next.t(key));
+          break;
+        default:
+          // Update inner HTML
+          $el.html(i18next.t(key));
+          break;
+      }
+    });
+  } 
 
   function initEmailValidation() {
     Fliplet.Navigator.onReady().then(function() {
@@ -33,6 +117,10 @@ Fliplet.Widget.instance('login-ds', function(data) {
         attachEventListeners();
         setUserDataPV(function() {}, function() {});
       });
+
+      Fliplet.Hooks.run('beforei18Init', { langs: defaultLang });
+
+      initI18Next();
 
       // New logic to redirect
       // Check if user is already verified
