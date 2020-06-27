@@ -77,8 +77,9 @@ Fliplet.Widget.instance('login-ds', function(data) {
       setCurrentLang()
 
       $container.css('visibility', 'visible');
+
       // Fire hook for other features to adjust UI render if necessary
-      Fliplet.Hooks.run('i10nComplete');
+      Fliplet.Hooks.run('loginLocalized');
     });
   }
 
@@ -118,9 +119,10 @@ Fliplet.Widget.instance('login-ds', function(data) {
         setUserDataPV(function() {}, function() {});
       });
 
-      Fliplet.Hooks.run('beforei18Init', { langs: defaultLang });
-
-      initI18Next();
+      Fliplet.Hooks.run('beforeLoginLocalize', { langs: defaultLang })
+        .then(function() {
+          initI18Next();
+        });
 
       // New logic to redirect
       // Check if user is already verified
