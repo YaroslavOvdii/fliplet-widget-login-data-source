@@ -252,25 +252,28 @@ Fliplet.Widget.instance('login-ds', function(data) {
     // EVENT LISTENER FOR FORGET PASSWORD RESET
     // Just switches views Login to Email verification
     // Leave as it is
-    $container.on('click', '.btn-forget-pass', function() {
-      $container.find('.fl-login-holder').fadeOut(100, function() {
+    $container.on('click keydown', '.btn-forget-pass', function(event) {
+      if (event.type === 'click' || event.which === 32 || event.which === 13) {
+        $container.find('.fl-login-holder').fadeOut(100, function() {
         $container.find('.fl-restore-pass').fadeIn(300);
         calculateElHeight($container.find('.state[data-state=verify-email]'));
-      });
+        });
+      }
     });
 
+    $container.on('click keydown', '.back-login', function() {
+        if (event.type === 'click' || event.which === 32 || event.which === 13) {
+        $container.find('.fl-restore-pass').fadeOut(100, function() {
+          $container.find('.fl-login-holder').fadeIn(250);
 
-    $container.on('click', '.back-login', function() {
-      $container.find('.fl-restore-pass').fadeOut(100, function() {
-        $container.find('.fl-login-holder').fadeIn(250);
-
-        // Reset states of email verification
-        $container.find('.reset-email-error').addClass('hidden');
-        $container.find('.pin-verify-error').addClass('hidden');
-        $container.find('.pin-sent-error').addClass('hidden');
-        $container.find('.state').removeClass('present past').addClass('future');
-        $container.find('.state[data-state=verify-email]').removeClass('future').addClass('start');
-      });
+          // Reset states of email verification
+          $container.find('.reset-email-error').addClass('hidden');
+          $container.find('.pin-verify-error').addClass('hidden');
+          $container.find('.pin-sent-error').addClass('hidden');
+          $container.find('.state').removeClass('present past').addClass('future');
+          $container.find('.state[data-state=verify-email]').removeClass('future').addClass('start');
+        });
+      }
     });
 
     $container.on('submit', '.form-verify-email', function(event) {
