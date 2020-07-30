@@ -98,10 +98,6 @@ input.form-control {
   pointer-events: none;
 }
 
-.fl-login-form .btn.btn-link.btn-forget-pass:focus,
-.fl-restore-pass .btn.btn-link.back-login:focus {
-  color: #23527c;
-}
 
 /* END OF LOGIN */
 /* LOADER ANIMATION */
