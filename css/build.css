@@ -189,6 +189,7 @@ input.form-control {
   transform: translate3d(105%, 0, 0);
   -webkit-transition: all 0.25s ease;
   transition: all 0.25s ease;
+  display: none;
 }
 
 .state p {
