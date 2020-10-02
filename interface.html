@@ -1,7 +1,7 @@
 <div class="widget-holder">
   <header>
     <p>Configure your login component</p>
-    <a href="#">Need help?</a>
+    <a href="https://help.fliplet.com/article/181" target="_blank">Need help?</a>
   </header>
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active" id="settings-control"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
@@ -10,6 +10,13 @@
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane tab-pane-content active" id="settings">
       <form class="form-horizontal">
+        <div class="alert alert-warning hidden" id="security-alert">
+          <strong><p>Security rule warning</p></strong>
+          <p>Please check your app's <u>security rules</u> as we have detected your 
+            <span>login screen is not mentioned.</span> 
+            <a href="https://help.fliplet.com/screen-security/" target="_blank">Learn more about security rules.</a>  
+          </p>
+        </div>
         <p>To configure the login component you will need to choose the <b>Email</b> and <b>Password</b> fields of your data source.</p>
         <div class="form-group">
           <div class="col-sm-4 control-label">
@@ -72,6 +79,23 @@
             </div>
           </div>
         </div>
+        <div class="expire-timeout-settings form-group hidden clearfix">
+          <div class="col-sm-4 control-label">
+            <label for="expire-timeout">Verification code will expire after</label>
+          </div>
+          <div class="col-xs-7 col-sm-5">
+            <input type="number" name="expire-timeout" class="form-control" id="expire-timeout" placeholder="Enter a number" min="0" required />
+          </div>
+          <div class="col-xs-5 col-sm-3">
+            <select name="expire-timeout" id="time-value" class="form-control custom-chevron">
+              <option value="1">minutes</option>
+              <option value="60">hours</option>
+              <option value="1440">days</option>
+              <option value="10080">weeks</option>
+            </select>
+            <i class="fa fa-chevron-down"></i>
+          </div>
+        </div>
         <div class="form-group">
           <label class="col-sm-4 control-label">Redirect after logging in</label>
           <div class="col-sm-8">
@@ -98,7 +122,7 @@
             <li><code>\{{code}}</code> - insert the verification code <strong>(Required)</strong></li>
             <li><code>\{{appName}}</code> - insert your app name</li>
             <li><code>\{{organisationName}}</code> - insert your organisation name</li>
-            <li><code>\{{expire}}</code> - insert the expiration time of the verification code (in hours)</li>
+            <li><code>\{{expireDescription}}</code> - insert the expiration time of the verification code</li>
             <li><code>\{{time}}</code> - insert the time when the code was generated</li>
           </ul>
         </div>
@@ -139,12 +163,12 @@
                         <td>
                           <h1 style="text-align:center;font-weight:normal;line-height:1.4;color:#666;font-size:24px">Verification code for<br><strong style="color:#333">\{{ appName }}</strong></h1>
                           <h2 style="text-align:center;font-weight:normal;line-height:1.4;color:#666;font-size:24px">Your code is<br><strong style="color:#333">\{{ code }}</strong></h2>
-                          <p style="text-align:center;font-size:12px;color:#999">This code is only valid for \{{ expire }} minutes</p>
+                          <p style="text-align:center;font-size:12px;color:#999">This code is only valid for \{{ expireDescription }}</p>
                           <hr style="border-left:none;border-right:0;border-bottom:0;border-top:1px solid #ccc" />
                           <p style="color:#333;line-height:1.6;font-size:14px">This email is sent to you from \{{ organisationName }}.</p>
                           <p style="color:#333;line-height:1.6;font-size:14px"><strong>What is this code for?</strong> To verify you can access the registered email address and protect your account. Please enter the above code into your app.</p>
-                          <p style="color:#333;line-height:1.6;font-size:14px"><strong> Didn't request this code?</strong> Please ignore it. If you think someone is trying to use your details without permission or are concerned by this email please contact your app administrator.</p>
-                          <p style="color:#333;line-height:1.6;font-size:14px"><strong> Do you have further questions?</strong> please contact your app administrator.
+                          <p style="color:#333;line-height:1.6;font-size:14px"><strong>Didn't request this code?</strong> Please ignore it. If you think someone is trying to use your details without permission or are concerned by this email please contact your app administrator.</p>
+                          <p style="color:#333;line-height:1.6;font-size:14px"><strong>Do you have further questions?</strong> Please contact your app administrator.
                             <hr style="border-left:none;border-right:0;border-bottom:0;border-top:1px solid #ccc" />
                             <p style="color:#999;line-height:1.6;font-size:12px">This email is sent by <a href="https://fliplet.com">Fliplet</a>, an enterprise app platform used by <strong>\{{ organisationName }}</strong> to manage their mobile and web apps. To find out more about Fliplet and our terms and conditions please visit <a href="https://fliplet.com">fliplet.com</a>.</p>
                         </td>

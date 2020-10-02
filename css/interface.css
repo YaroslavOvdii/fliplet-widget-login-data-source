@@ -53,6 +53,28 @@ h2 small {
   padding-top: 15px;
 }
 
+.alert-warning u {
+  cursor: pointer;
+}
+
+select.custom-chevron {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  margin-left: -1px;
+}
+
+select.custom-chevron + i.fa {
+  float: right;
+  margin-top: -30px;
+  margin-right: 10px;
+  pointer-events: none;
+  background-color: transparent;
+  color: #abaaab;
+  padding-right: 5px;
+}
+
 /* @MEDIA QUERY */
 
 @media screen and (min-width: 640px) {
