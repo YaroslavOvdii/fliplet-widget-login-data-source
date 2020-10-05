@@ -1,31 +1,23 @@
 
 var widgetId = Fliplet.Widget.getDefaultId();
 var data = Fliplet.Widget.getData(widgetId) || {};
-var organizationId = Fliplet.Env.get('organizationId');
 var appId = Fliplet.Env.get('appId');
 var dataSourceProvider = null;
-var $dataColumnsEmail = $("select#dataSourceColumnEmail");
-var $dataColumnsPass = $("select#dataSourceColumnPass");
+var $dataColumnsEmail = $('select#dataSourceColumnEmail');
+var $dataColumnsPass = $('select#dataSourceColumnPass');
 var validInputEventName = 'interface-validate';
 var page = Fliplet.Widget.getPage();
 var omitPages = page ? [page.id] : [];
 
-var $dataSource = $('#dataSource');
-var allDataSources;
 var currentDataSource;
 var initialLoadingDone = false;
 var defaultExpireTimeout = 2880;
 
-var templates = {
-  dataSourceEntry: template('data-source-entry')
-};
-
 var defaultEmailTemplate = $('#email-template-default').html();
 
 var fields = [
-  'dataSource',
-  'emailColumn',
-  'passColumn',
+  'dataSourceColumnEmail',
+  'dataSourceColumnPass',
   'expireTimeout'
 ];
 
@@ -94,6 +86,7 @@ tinymce.init({
 
 // 1. Fired from Fliplet Studio when the external save button is clicked
 Fliplet.Widget.onSaveRequest(function() {
+  dataSourceProvider.forwardSaveRequest();
   $('form').submit();
 });
 
@@ -116,22 +109,22 @@ function template(name) {
 
 function initDataSourceProvider(currentDataSourceId) {
   var dataSourceData = {
-    dataSourceTitle: "Login data source",
+    dataSourceTitle: 'Login data source',
     dataSourceId: currentDataSourceId,
-    appId: Fliplet.Env.get("appId"),
+    appId: Fliplet.Env.get('appId'),
     default: {
-      name: "Login data for " + Fliplet.Env.get("appName"),
+      name: 'Login data for ' + Fliplet.Env.get('appName'),
       entries: [],
-      columns: [],
+      columns: []
     },
-    accessRules: [],
+    accessRules: []
   };
 
-  dataSourceProvider = Fliplet.Widget.open("com.fliplet.data-source-provider", {
-    selector: "#dataSourceProvider",
+  dataSourceProvider = Fliplet.Widget.open('com.fliplet.data-source-provider', {
+    selector: '#dataSourceProvider',
     data: dataSourceData,
-    onEvent: function (event, dataSource) {
-      if (event === "dataSourceSelect") {
+    onEvent: function(event, dataSource) {
+      if (event === 'dataSourceSelect') {
         $dataColumnsEmail.html(
           '<option selected value="">-- Select email column</option>'
         );
@@ -140,23 +133,23 @@ function initDataSourceProvider(currentDataSourceId) {
         );
         // Appends Column Titles to new Select Box
         if (dataSource.columns) {
-          dataSource.columns.forEach(function (column) {
+          dataSource.columns.forEach(function(column) {
             renderDataSourceColumn(column);
           });
         }
 
-        if (data.dataSourceColumn) {
-          $dataColumnsEmail.val(data.dataSourceColumn);
-          $dataColumnsPass.val(data.dataSourceColumn);
+        if (data.dataSourceColumnEmail || data.dataSourceColumnPass) {
+          $dataColumnsEmail.val(data.dataSourceColumnEmail);
+          $dataColumnsPass.val(data.dataSourceColumnPass);
         }
 
-        $("#select-email-field").toggleClass("hidden", dataSource.id === null);
-        $("#select-pass-field").toggleClass("hidden", dataSource.id === null);
+        $('#select-email-field').toggleClass('hidden', dataSource.id === null);
+        $('#select-pass-field').toggleClass('hidden', dataSource.id === null);
       }
-    },
+    }
   });
 
-  dataSourceProvider.then((dataSource) => {
+  dataSourceProvider.then(function(dataSource) {
     data.dataSourceId = dataSource.data.id;
   });
 }
@@ -188,14 +181,14 @@ function setReadableExpirePeriod(value) {
 }
 
 // Converts time to minutes depending on selected hours or days or weeks
-function convertTimeToMinutes () {
+function convertTimeToMinutes() {
   var inputValue = $('#expire-timeout').val();
   var selectValue = $('#time-value').val();
   return inputValue * selectValue;
 }
 
 // Shows warning if security setting are not configured correctly
-function checkSecurityRules () {
+function checkSecurityRules() {
   Fliplet.API.request('v1/apps/' + appId).then(function(result) {
     if (!result || !result.app) {
       return;
@@ -205,13 +198,13 @@ function checkSecurityRules () {
     var isSecurityConfigured = _.some(hooks, function(hook) {
       return hook.script.indexOf(page.id) !== -1;
     });
-    
+
     if (!hooks.length) {
       $('#security-alert span').text('app has no security rules configured to prevent unauthorized access.');
     }
 
     $('#security-alert').toggleClass('hidden', isSecurityConfigured);
-  })
+  });
 }
 
 function save(notifyComplete) {
@@ -278,10 +271,10 @@ Fliplet.Widget.emit(validInputEventName, {
 
 function renderDataSourceColumn(dataSourceColumn) {
   $dataColumnsEmail.append(
-    '<option value="' + dataSourceColumn + '">' + dataSourceColumn + "</option>"
+    '<option value="' + dataSourceColumn + '">' + dataSourceColumn + '</option>'
   );
   $dataColumnsPass.append(
-    '<option value="' + dataSourceColumn + '">' + dataSourceColumn + "</option>"
+    '<option value="' + dataSourceColumn + '">' + dataSourceColumn + '</option>'
   );
 }
 
@@ -350,7 +343,7 @@ $('#expire-timeout').on('keydown', function(event) {
 });
 
 function init() {
-  initDataSourceProvider();
+  initDataSourceProvider(data.dataSourceId);
   initializeData();
 }
 
