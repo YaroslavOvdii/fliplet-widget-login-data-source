@@ -3,6 +3,9 @@ var widgetId = Fliplet.Widget.getDefaultId();
 var data = Fliplet.Widget.getData(widgetId) || {};
 var organizationId = Fliplet.Env.get('organizationId');
 var appId = Fliplet.Env.get('appId');
+var dataSourceProvider = null;
+var $dataColumnsEmail = $("select#dataSourceColumnEmail");
+var $dataColumnsPass = $("select#dataSourceColumnPass");
 var validInputEventName = 'interface-validate';
 var page = Fliplet.Widget.getPage();
 var omitPages = page ? [page.id] : [];
@@ -109,6 +112,53 @@ loginActionProvider.then(function(result) {
 // Function to compile a Handlebars template
 function template(name) {
   return Handlebars.compile($('#template-' + name).html());
+}
+
+function initDataSourceProvider(currentDataSourceId) {
+  var dataSourceData = {
+    dataSourceTitle: "Login data source",
+    dataSourceId: currentDataSourceId,
+    appId: Fliplet.Env.get("appId"),
+    default: {
+      name: "Login data for " + Fliplet.Env.get("appName"),
+      entries: [],
+      columns: [],
+    },
+    accessRules: [],
+  };
+
+  dataSourceProvider = Fliplet.Widget.open("com.fliplet.data-source-provider", {
+    selector: "#dataSourceProvider",
+    data: dataSourceData,
+    onEvent: function (event, dataSource) {
+      if (event === "dataSourceSelect") {
+        $dataColumnsEmail.html(
+          '<option selected value="">-- Select email column</option>'
+        );
+        $dataColumnsPass.html(
+          '<option selected value="">-- Select password column</option>'
+        );
+        // Appends Column Titles to new Select Box
+        if (dataSource.columns) {
+          dataSource.columns.forEach(function (column) {
+            renderDataSourceColumn(column);
+          });
+        }
+
+        if (data.dataSourceColumn) {
+          $dataColumnsEmail.val(data.dataSourceColumn);
+          $dataColumnsPass.val(data.dataSourceColumn);
+        }
+
+        $("#select-email-field").toggleClass("hidden", dataSource.id === null);
+        $("#select-pass-field").toggleClass("hidden", dataSource.id === null);
+      }
+    },
+  });
+
+  dataSourceProvider.then((dataSource) => {
+    data.dataSourceId = dataSource.data.id;
+  });
 }
 
 // Converts minutes to hours or days or weeks
@@ -226,133 +276,18 @@ Fliplet.Widget.emit(validInputEventName, {
   isValid: false
 });
 
-Fliplet.DataSources.get({ organizationId: organizationId, appId: appId }).then(function(dataSources) {
-  allDataSources = dataSources || [];
-  $dataSource.html('<option value="">-- Select a data source</option><option disabled>------</option><option value="new">Create a new data source</option><option disabled>------</option>');
-  _.forEach(dataSources, renderDataSource);
-  return Promise.resolve();
-}).then(initializeData);
-
-function reloadDataSource(dataSourceId) {
-  Fliplet.DataSources.get({ organizationId: organizationId, appId: appId }, {cache: false}).then(function(dataSources) {
-    allDataSources = dataSources || [];
-    $dataSource.html('<option value="">-- Select a data source</option><option disabled>------</option><option value="new">Create a new data source</option><option disabled>------</option>');
-    _.forEach(dataSources, renderDataSource);
-    return Promise.resolve();
-  }).then(function() {
-    $dataSource.val(dataSourceId);
-    $dataSource.trigger('change');
-  });
-}
-
-function renderDataSource(dataSource) {
-  $dataSource.append(templates.dataSourceEntry(dataSource));
-}
-
 function renderDataSourceColumn(dataSourceColumn) {
-  $('#emailColumn').append('<option value="' + dataSourceColumn + '">' + dataSourceColumn + '</option>');
-  $('#passColumn').append('<option value="' + dataSourceColumn + '">' + dataSourceColumn + '</option>');
-}
-
-function createDataSource() {
-  event.preventDefault();
-
-  Fliplet.Modal.prompt({
-    title: 'Please enter a data source name'
-  }).then(function(result) {
-    if (result === null) {
-      $dataSource.val('').trigger('change');
-      return;
-    }
-
-    var dataSourceName = result.trim();
-
-    if (!dataSourceName) {
-      Fliplet.Modal.alert({
-        message: 'You must enter a data source name'
-      }).then(function() {
-        createDataSource();
-        return;
-      });
-    }
-
-    $('#manage-data').removeClass('hidden');
-    $('#select-email-field').removeClass('hidden');
-    $('#select-pass-field').removeClass('hidden');
-
-    Fliplet.DataSources.create({
-      name: dataSourceName,
-      organizationId: Fliplet.Env.get('organizationId')
-    }).then(function(ds) {
-      allDataSources.push(ds);
-      $dataSource.append('<option value="' + ds.id + '">' + ds.name + '</option>');
-      $dataSource.val(ds.id).trigger('change');
-    });
-  });
-}
-
-function manageAppData() {
-  var dataSourceId = $dataSource.val();
-  Fliplet.Studio.emit('overlay', {
-    name: 'widget',
-    options: {
-      size: 'large',
-      package: 'com.fliplet.data-sources',
-      title: 'Edit Data Sources',
-      classes: 'data-source-overlay',
-      data: {
-        context: 'overlay',
-        dataSourceId: dataSourceId
-      }
-    }
-  });
+  $dataColumnsEmail.append(
+    '<option value="' + dataSourceColumn + '">' + dataSourceColumn + "</option>"
+  );
+  $dataColumnsPass.append(
+    '<option value="' + dataSourceColumn + '">' + dataSourceColumn + "</option>"
+  );
 }
 
 function syncTempColumns(columnType) {
   tempColumnValues[columnType] = $('#' + columnType).val();
 }
-
-Fliplet.Studio.onMessage(function(event) {
-  if (event.data && event.data.event === 'overlay-close') {
-    reloadDataSource(event.data.data.dataSourceId || currentDataSource.id);
-  }
-});
-
-$('#manage-data a').on('click', manageAppData);
-
-$dataSource.on('change', function onDataSourceListChange() {
-  var selectedOption = $(this).find('option:selected');
-  var selectedText = selectedOption.text();
-  var selectedValue = parseInt(selectedOption.val(), 10);
-  var optionValue =  $(this).val();
-
-  $(this).parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
-  $('#emailColumn option:gt(0)').remove();
-  $('#passColumn option:gt(0)').remove();
-
-  if (optionValue === 'new') {
-    createDataSource();
-  }
-
-  var dsSelected =  !optionValue || optionValue === 'none' || optionValue === 'new';
-
-  $('#manage-data').toggleClass('hidden', dsSelected);
-  $('#select-email-field').toggleClass('hidden', dsSelected);
-  $('#select-pass-field').toggleClass('hidden', dsSelected);
-
-  _.forEach(allDataSources, function(dataSource) {
-    if (dataSource.id === selectedValue && dataSource.columns) {
-      currentDataSource = dataSource;
-      _.forEach(dataSource.columns, renderDataSourceColumn);
-
-      var emainColumnValue = dataSource.columns.indexOf(tempColumnValues.emailColumn) !== -1 ? tempColumnValues.emailColumn : 'none';
-      var passColumnValue = dataSource.columns.indexOf(tempColumnValues.passColumn) !== -1 ? tempColumnValues.passColumn : 'none';
-
-      $('#emailColumn').val(emainColumnValue).trigger('change');
-      $('#passColumn').val(passColumnValue).trigger('change');
-    }
-  });
-});
 
 $('#emailColumn, #passColumn').on('change', function() {
   var selectedValue = $(this).val();
@@ -413,3 +348,10 @@ function initializeData() {
 $('#expire-timeout').on('keydown', function(event) {
   return event.keyCode === 8 || /[0-9]+/.test(event.key);
 });
+
+function init() {
+  initDataSourceProvider();
+  initializeData();
+}
+
+init();

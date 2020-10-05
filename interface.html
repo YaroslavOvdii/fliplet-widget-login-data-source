@@ -19,21 +19,7 @@
         </div>
         <p>To configure the login component you will need to choose the <b>Email</b> and <b>Password</b> fields of your data source.</p>
         <div class="form-group">
-          <div class="col-sm-4 control-label">
-            <label for="dataSource">Select a data source</label>
-          </div>
-          <div class="col-sm-8">
-            <label for="dataSource" class="select-proxy-display">
-              <select name="select_datasource" id="dataSource" data-label="select" class="hidden-select form-control">
-                <option value="none">-- Select a data source</option>
-                <option disabled>------</option>
-                <option value="new">Create a new data source</option>
-                <option disabled>------</option>
-              </select>
-              <span class="icon fa fa-chevron-down"></span>
-              <span class="select-value-proxy">-- Select a data source</span>
-            </label>
-            <small id="manage-data" class="hidden"><a href="#">Edit data source</a></small>
+          <div id="dataSourceProvider" class="col-sm-8 ui-sortable">
           </div>
         </div>
         <div class="form-group hidden" id="select-email-field">
@@ -41,14 +27,12 @@
             <label for="emailColumn">Select the email field</label>
           </div>
           <div class="col-sm-8">
-            <label for="emailColumn" class="select-proxy-display">
-              <select name="select_email" id="emailColumn" data-label="select" class="hidden-select form-control">
-                <option value="none">-- Select email field</option>
+            <label for="dataSourceColumnEmail" class="select-proxy-display">
+              <select name="select_email" id="dataSourceColumnEmail" data-label="select" class="hidden-select form-control">
               </select>
               <span class="icon fa fa-chevron-down"></span>
               <span class="select-value-proxy">-- Select email field</span>
             </label>
-            <span class="text-helper">Users will use the email on this field to log in.</span>
           </div>
         </div>
         <div class="form-group hidden" id="select-pass-field">
@@ -56,12 +40,10 @@
             <label for="passColumn">Select the password field</label>
           </div>
           <div class="col-sm-8">
-            <label for="passColumn" class="select-proxy-display">
-              <select name="select_pass" id="passColumn" data-label="select" class="hidden-select form-control">
-                <option value="none">-- Select password field</option>
+            <label for="dataSourceColumnPass" class="select-proxy-display">
+              <select name="select_pass" id="dataSourceColumnPass" data-label="select" class="hidden-select form-control">
               </select>
               <span class="icon fa fa-chevron-down"></span>
-              <span class="select-value-proxy">-- Select password field</span>
             </label>
             <span class="text-helper">Users will use the password on this field to log in.</span>
           </div>
