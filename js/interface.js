@@ -138,7 +138,7 @@ function initDataSourceProvider(currentDataSourceId) {
           });
         }
 
-        if (data.dataSourceColumnEmail || data.dataSourceColumnPass) {
+        if (data || data.dataSourceColumnEmail || data.dataSourceColumnPass) {
           $dataColumnsEmail.val(data.dataSourceColumnEmail);
           $dataColumnsPass.val(data.dataSourceColumnPass);
         }
