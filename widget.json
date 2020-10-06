@@ -1,6 +1,6 @@
 {
-  "name": "Login-andrey",
-  "package": "com.fliplet.login-data-source-andrey",
+  "name": "Login",
+  "package": "com.fliplet.login-data-source",
   "version": "2.0.0",
   "icon": "img/icon.png",
   "tags": ["type:component", "category:security"],
