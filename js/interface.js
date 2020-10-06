@@ -3,8 +3,8 @@ var widgetId = Fliplet.Widget.getDefaultId();
 var data = Fliplet.Widget.getData(widgetId) || {};
 var appId = Fliplet.Env.get('appId');
 var dataSourceProvider = null;
-var $dataColumnsEmail = $('select#dataSourceColumnEmail');
-var $dataColumnsPass = $('select#dataSourceColumnPass');
+var $dataColumnsEmail = $('#emailColumn');
+var $dataColumnsPass = $('#passColumn');
 var validInputEventName = 'interface-validate';
 var page = Fliplet.Widget.getPage();
 var omitPages = page ? [page.id] : [];
@@ -16,8 +16,8 @@ var defaultExpireTimeout = 2880;
 var defaultEmailTemplate = $('#email-template-default').html();
 
 var fields = [
-  'dataSourceColumnEmail',
-  'dataSourceColumnPass',
+  'emailColumn',
+  'passColumn',
   'expireTimeout'
 ];
 
@@ -87,7 +87,6 @@ tinymce.init({
 // 1. Fired from Fliplet Studio when the external save button is clicked
 Fliplet.Widget.onSaveRequest(function() {
   dataSourceProvider.forwardSaveRequest();
-  $('form').submit();
 });
 
 // 2. Fired when the user submits the form
@@ -131,6 +130,7 @@ function initDataSourceProvider(currentDataSourceId) {
         $dataColumnsPass.html(
           '<option selected value="">-- Select password column</option>'
         );
+
         // Appends Column Titles to new Select Box
         if (dataSource.columns) {
           dataSource.columns.forEach(function(column) {
@@ -138,9 +138,9 @@ function initDataSourceProvider(currentDataSourceId) {
           });
         }
 
-        if (data.dataSourceColumnEmail || data.dataSourceColumnPass) {
-          $dataColumnsEmail.val(data.dataSourceColumnEmail);
-          $dataColumnsPass.val(data.dataSourceColumnPass);
+        if (data.passColumn || data.emailColumn) {
+          $dataColumnsEmail.val(data.emailColumn);
+          $dataColumnsPass.val(data.passColumn);
         }
 
         $('#select-email-field').toggleClass('hidden', dataSource.id === null);
@@ -151,6 +151,7 @@ function initDataSourceProvider(currentDataSourceId) {
 
   dataSourceProvider.then(function(dataSource) {
     data.dataSourceId = dataSource.data.id;
+    $('form').submit();
   });
 }
 
