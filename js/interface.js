@@ -143,8 +143,8 @@ function initDataSourceProvider(currentDataSourceId) {
           $dataColumnsPass.val(data.passColumn);
         }
 
-        $('#select-email-field').toggleClass('hidden', dataSource.id === null);
-        $('#select-pass-field').toggleClass('hidden', dataSource.id === null);
+        $('#select-email-field').toggleClass('hidden', !dataSource.id);
+        $('#select-pass-field').toggleClass('hidden', !dataSource.id);
       }
     }
   });
