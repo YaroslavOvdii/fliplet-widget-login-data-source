@@ -18,7 +18,7 @@ Fliplet.Widget.instance('login-ds', function(data) {
 
   var CODE_VALID = 30;
   var APP_NAME = Fliplet.Env.get('appName');
-  var APP_VALIDATION_DATA_DIRECTORY_ID = parseInt(data.dataSourceId, 10);
+  var APP_VALIDATION_DATA_DIRECTORY_ID = parseInt(data.dataSource, 10);
   var DATA_DIRECTORY_EMAIL_COLUMN = data.emailColumn;
   var DATA_DIRECTORY_PASS_COLUMN = data.passColumn;
   var ORG_NAME = Fliplet.Env.get('organizationName');

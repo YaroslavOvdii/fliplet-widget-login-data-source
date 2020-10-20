@@ -150,7 +150,7 @@ function initDataSourceProvider(currentDataSourceId) {
   });
 
   dataSourceProvider.then(function(dataSource) {
-    data.dataSourceId = dataSource.data.id;
+    data.dataSource = dataSource.data.id;
     $('form').submit();
   });
 }
@@ -344,7 +344,7 @@ $('#expire-timeout').on('keydown', function(event) {
 });
 
 function init() {
-  initDataSourceProvider(data.dataSourceId);
+  initDataSourceProvider(data.dataSource);
   initializeData();
 }
 
