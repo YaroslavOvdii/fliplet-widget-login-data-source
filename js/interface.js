@@ -143,7 +143,7 @@ function initDataSourceProvider(currentDataSourceId) {
           $dataColumnsPass.val(data.passColumn);
         }
 
-        currentDataSource = dataSource;
+        currentDataSource = dataSource.id ? dataSource : null;
 
         $('#select-email-field').toggleClass('hidden', !dataSource.id);
         $('#select-pass-field').toggleClass('hidden', !dataSource.id);
